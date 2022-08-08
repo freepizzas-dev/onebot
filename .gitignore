@@ -1,0 +1,8 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+# Logs and generated google-cookies, sqlite db
+src/log/
+src/.google-cookie
+*.db
