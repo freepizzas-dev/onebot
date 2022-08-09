@@ -14,9 +14,12 @@ Always quick and frequently updated.
 
 Google Web Search, Image Search, Gif Search, Weather, Wiktionary, Urban Dictionary.
 
-Don't see what you need? Message `freepizzas#4224` for feature requests, or...
+Don't see what you need?
 ----> [join the Discord server!](https://discord.gg/cwWDVtCW3x)<----
+Feature requests are always welcome.
 ----> [test the bot HERE!](https://discord.gg/cwWDVtCW3x)<----
+Onebot is fully open source, and the live hosted version is run directly off the code in the repository.
+----> [Check out the github repository here.](https://github.com/freepizzas-dev/onebot/)<----
 
 ### COMMAND REFERENCE
 
