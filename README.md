@@ -21,6 +21,8 @@ Feature requests are always welcome.
 
 ----> [test the bot HERE!](https://discord.gg/cwWDVtCW3x)<----
 
+----> [Rate and review the bot on top.gg!](https://top.gg/bot/825499706724843573)<----
+
 ### HOW TO HOST YOUR OWN VERSION OF ONEBOT
 First, familiarize yourself with the [Discord Developer Portal](https://discord.com/developers/applications). You'll need to create an application for your bot and set it up. There are plenty of tutorials online on how to accomplish this, so I won't get in to it here.
 
