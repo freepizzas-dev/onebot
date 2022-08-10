@@ -54,6 +54,11 @@ async def on_ready():
     activity = nextcord.Game(name=onebot.config.ACTIVITY)
     await onebot.change_presence(activity=activity)
 
+# do we need to do any cleanup on close?
+@onebot.event
+async def on_close():
+    pass
+
 # start the bot
 discord_token = os.environ.get("DISCORD_TOKEN")
 onebot.run(discord_token)
