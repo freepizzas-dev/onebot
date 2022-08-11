@@ -24,7 +24,7 @@ else:
 onebot.config = onebot_config
 onebot.utils = onebot_utils
 onebot.db_utils = onebot_db_utils
-onebot.aiohttp_session = None #async init happens later, in on_ready
+onebot.aiohttp_session = None  # async init happens later, in on_ready
 onebot.launch_time = datetime.now()
 onebot.log_filename = "log/onebot-" + str(onebot.launch_time.strftime("%Y%b%d-%H%M%S")) + ".log"
 logging.basicConfig(
@@ -54,6 +54,7 @@ for module in onebot.config.ONEBOT_MODULES:
         onebot.logger.error("Something went wrong while loading module " + module + ".")
         onebot.logger.error(e.__traceback__)
 
+
 # what to do when connection to Discord is established
 @onebot.event
 async def on_ready():
@@ -61,6 +62,7 @@ async def on_ready():
         onebot.aiohttp_session = aiohttp.ClientSession()
     activity = nextcord.Game(name=onebot.config.ACTIVITY)
     await onebot.change_presence(activity=activity)
+
 
 # do we need to do any cleanup on close?
 @onebot.event

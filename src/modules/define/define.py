@@ -57,7 +57,7 @@ class DefinePager(nextcord.ui.View):
     define_data = None
     etym_only = False
     displayed_page = 0
-    
+
     def __init__(self, language, keyword, interaction, etym_only=False):
         super().__init__(timeout=None)
         self.language = language
@@ -114,7 +114,8 @@ class DefinePager(nextcord.ui.View):
         return_data["pronunciations"] = pronunciations_text
         return_data["url"] = url
         return_data["url_title"] = url_title
-        return_data["url_logo"] = "https://cdn.discordapp.com/attachments/933365248998658139/933889889219543080/unknown.png"
+        wiktionary_logo = "https://cdn.discordapp.com/attachments/933365248998658139/933889889219543080/unknown.png"
+        return_data["url_logo"] = wiktionary_logo
 
         return return_data
 

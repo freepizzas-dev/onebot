@@ -41,8 +41,7 @@ class DebugCog(commands.Cog):
             if guild_members != "unknown":
                 member_count = member_count + guild.member_count
             self.bot.logger.info(str(guild.id) + ": " + str(guild_members) + " members, "
-                + str(guild_channels) + " channels | " + str(guild.name)
-            )
+                                 + str(guild_channels) + " channels | " + str(guild.name))
         self.bot.logger.info(str(member_count) + " members in " + str(guild_count) + " guilds.")
         self.separator()
 

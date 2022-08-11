@@ -12,7 +12,7 @@ class UrbandictionaryCog(commands.Cog):
 
     @nextcord.slash_command(
         name="ud",
-        description="Retrieves a definition from urbandictionary.com. Use without a keyword to get the Word of the Day.",
+        description="Retrieves a definition from Urban Dictionary. Use without a keyword to get the Word of the Day.",
     )
     async def urbandictionary(
         self,
@@ -85,11 +85,8 @@ class UrbandictionaryCog(commands.Cog):
 
 def setup(bot):
     if "XRAPIDKEY" not in os.environ:
-        bot.logger.error(
-            "URBANDICTIONARY | Missing XRAPIDKEY in your .env file! Urbandictionary module not loaded."
-        )
-        bot.logger.error(
-            "URBANDICTIONARY | You need an XRapidApi key to use the urbandictionary endpoint. https://docs.rapidapi.com/docs/keys"
-        )
+        bot.logger.error("URBANDICTIONARY | Missing XRAPIDKEY in your .env file! Urbandictionary module not loaded.")
+        bot.logger.error("URBANDICTIONARY | You need an XRapidApi key to use the urbandictionary endpoint."
+                         " https://docs.rapidapi.com/docs/keys")
     else:
         bot.add_cog(UrbandictionaryCog(bot))

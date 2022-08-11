@@ -51,6 +51,7 @@ class ImageCog(commands.Cog):
         view = ImagePager(interaction, filtered_list)
         await view.update()
 
+
 class ImagePager(nextcord.ui.View):
     interaction = None
     view_message = None
@@ -72,7 +73,7 @@ class ImagePager(nextcord.ui.View):
         if self.displayed_page > 0:
             self.displayed_page -= 1
         await self.update()
-    
+
     @nextcord.ui.button(label="1 of #", style=nextcord.ButtonStyle.secondary)
     async def current_page(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
         pass

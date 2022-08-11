@@ -1,6 +1,7 @@
 from datetime import datetime
 from nextcord.ext import tasks, commands
 
+
 # a simple cog to handle periodic DB tasks
 # currently, it just updates when a guild was last seen, and deleted a guild's
 # data after it hasn't been seen for 90 days.
@@ -42,7 +43,9 @@ class DBMaintCog(commands.Cog):
                     self.bot.logger.info("DB_MAINT | Deleted DB " + str(db) + " due to inactivity.")
                 else:
                     self.bot.db_utils.set_server_pref(db, "marked_delete", 1)
-                    self.bot.logger.info("DB_MAINT | DB " + str(db) + " marked for deletion. This database will be deleted the next time the cleanup task runs.")
+                    self.bot.logger.info("DB_MAINT | DB " + str(db) + " marked for deletion. This database"
+                                         " will be deleted the next time the cleanup task runs.")
+
 
 def setup(bot):
     bot.add_cog(DBMaintCog(bot))

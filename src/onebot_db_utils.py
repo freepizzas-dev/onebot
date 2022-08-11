@@ -7,7 +7,8 @@ import os
 import os.path
 import onebot_config
 
-#lists available server databases
+
+# lists available server databases
 def list_db():
     file_list = os.listdir(path=onebot_config.DB_PATH)
     dbs_list = []
@@ -16,8 +17,9 @@ def list_db():
             dbs_list.append(file.replace(".db", ""))
     return dbs_list
 
-#creates a new database for the specified server_id
-#uses sql_schema.sql for initial DB schema
+
+# creates a new database for the specified server_id
+# uses sql_schema.sql for initial DB schema
 def create_db(server_id):
     db_path = onebot_config.DB_PATH + str(server_id) + ".db"
     db_schema = onebot_config.DB_PATH + "schema.sql"
@@ -34,6 +36,7 @@ def create_db(server_id):
     db.commit()
     db.close()
 
+
 def delete_db(server_id):
     db_path = onebot_config.DB_PATH + str(server_id) + ".db"
     try:
@@ -41,8 +44,9 @@ def delete_db(server_id):
     except FileNotFoundError:
         pass
 
-#returns a sqlite3 connection object to the database for the specified server_id
-#creates a database for the server automatically if not found
+
+# returns a sqlite3 connection object to the database for the specified server_id
+# creates a database for the server automatically if not found
 def get_db_connection(server_id):
     db_path = onebot_config.DB_PATH + str(server_id) + ".db"
     if not os.path.exists(db_path):
@@ -50,6 +54,7 @@ def get_db_connection(server_id):
     db = sqlite3.connect(db_path)
     db.row_factory = sqlite3.Row
     return db
+
 
 def get_server_pref(server_id, pref_name):
     db = get_db_connection(server_id)
@@ -62,6 +67,7 @@ def get_server_pref(server_id, pref_name):
     if not db_result:
         return None
     return db_result["value"]
+
 
 def set_server_pref(server_id, pref_name, value):
     db = get_db_connection(server_id)
@@ -76,6 +82,7 @@ def set_server_pref(server_id, pref_name, value):
     db.commit()
     db.close()
 
+
 def clear_server_pref(server_id, pref_name):
     db = get_db_connection(server_id)
     db_cursor = db.cursor()
@@ -84,6 +91,7 @@ def clear_server_pref(server_id, pref_name):
     db_cursor.close()
     db.commit()
     db.close()
+
 
 def get_member_pref(server_id, user_id, pref_name):
     db = get_db_connection(server_id)
@@ -97,6 +105,7 @@ def get_member_pref(server_id, user_id, pref_name):
         return None
     return db_result["value"]
 
+
 def set_member_pref(server_id, user_id, pref_name, value):
     db = get_db_connection(server_id)
     db_cursor = db.cursor()
@@ -109,4 +118,3 @@ def set_member_pref(server_id, user_id, pref_name, value):
     db_cursor.close()
     db.commit()
     db.close()
-

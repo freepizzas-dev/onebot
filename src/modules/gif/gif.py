@@ -4,6 +4,7 @@ import json
 import nextcord
 from nextcord.ext import commands
 
+
 class GifCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -50,7 +51,7 @@ class GifCog(commands.Cog):
                     return
                 results = json.loads(await resp.read())
 
-            #if we got a valid answer, send it.
+            # if we got a valid answer, send it.
             if results["results"]:
                 # if there's only one result, set index to 0 or random.randint throws an exception
                 if len(results["results"]) == 1:

@@ -4,6 +4,7 @@ import nextcord
 from nextcord import SlashOption
 from nextcord.ext import commands
 
+
 class QuoteCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -112,7 +113,7 @@ class QuoteCog(commands.Cog):
         db_cursor.close()
         db_connection.close()
         return db_result
-    
+
     # get quote by author. same as above but checks Author field
     def get_quote_by_author(self, author, server_id):
         author = "%" + author + "%"
@@ -129,7 +130,7 @@ class QuoteCog(commands.Cog):
         db_cursor.close()
         db_connection.close()
         return db_result
-    
+
     # get quote by filtering by BOTH keyword and author
     def get_quote_by_keyword_and_author(self, keyword, author, server_id):
         keyword = "%" + keyword + "%"
@@ -217,7 +218,7 @@ class QuoteCog(commands.Cog):
         db_connection.close()
         return ranking
 
-    #increment_display_count also records a quote_display_timestamp for interesting statistics.
+    # increment_display_count also records a quote_display_timestamp for interesting statistics.
     def increment_display_count(self, quote_id, server_id):
         db_connection = self.bot.db_utils.get_db_connection(server_id)
         db_param = (quote_id, )
@@ -473,7 +474,7 @@ class QuoteCog(commands.Cog):
                 )
             await interaction.send(embed=quote_embed)
             return
-        
+
         else:
             await interaction.send("Sorry, I couldn't find that quote.", ephemeral=True)
             return

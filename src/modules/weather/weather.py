@@ -7,6 +7,7 @@ from nextcord.ext import commands
 from geopy.geocoders import Nominatim
 from astral import moon
 
+
 class WeatherCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -55,7 +56,7 @@ class WeatherCog(commands.Cog):
         return "from the " + directions[int(wind_dir / 22.5)]
 
     # convert wind from meters/sec to km/hour
-    def wind_ms_to_kmh(self, wind_speed):
+    def ms_to_kmh(self, wind_speed):
         return 3.6 * wind_speed
 
     # convert moon phase in float to emoji
@@ -82,7 +83,7 @@ class WeatherCog(commands.Cog):
         station_location = await self.coordinates_to_placename(
             weather_data_metric["lat"], weather_data_metric["lon"]
         )
-        #'conditions' text and corresponding icon url
+        # 'conditions' text and corresponding icon url
         conditions = str(weather_data_metric["current"]["weather"][0]["description"])
         conditions_icon = weather_data_metric["current"]["weather"][0]["icon"]
         conditions_icon_url = "http://openweathermap.org/img/wn/" + conditions_icon + "@2x.png"
@@ -203,14 +204,15 @@ class WeatherCog(commands.Cog):
             choices={"True": "True"},
         ),
     ):
-        user_default_location = self.bot.db_utils.get_member_pref(interaction.guild_id, interaction.user.id, "default_weather_location")
+        user_default_location = self.bot.db_utils.get_member_pref(interaction.guild_id,
+                                                                  interaction.user.id,
+                                                                  "default_weather_location")
         weather_location = None
         if not location:
             if not user_default_location:
-                await interaction.send(
-                    "You don't have a default location set, so you need to specify a location using the `location` option of the slash command.",
-                    ephemeral=True,
-                )
+                await interaction.send("You don't have a default location set, so you need to specify a location"
+                                       " using the `location` option of the slash command.",
+                                       ephemeral=True,)
                 return
             weather_location = user_default_location
         else:
@@ -238,59 +240,40 @@ class WeatherCog(commands.Cog):
         weather_data_metric = []
         async with self.bot.aiohttp_session.get(endpoint, headers=self.owm_headers, params=imperial_params) as resp:
             if resp.status != 200:
-                await interaction.send(
-                "I couldn't get the weather. (Server responded with HTTP code "
-                + str(resp.status)
-                + ")",
-                ephemeral=True,
-                )
-                self.bot.logger.error(
-                    "WEATHER | OpenWeatherMap returned response code "
-                    + str(resp.status)
-                )
+                await interaction.send("I couldn't get the weather. (Server responded with"
+                                       " HTTP code " + str(resp.status) + ")",
+                                       ephemeral=True,)
+                self.bot.logger.error("WEATHER | OpenWeatherMap returned response code " + str(resp.status))
                 return
             weather_data_imperial = json.loads(await resp.read())
         async with self.bot.aiohttp_session.get(endpoint, headers=self.owm_headers, params=metric_params) as resp:
             if resp.status != 200:
-                await interaction.send(
-                "I couldn't get the weather. (Server responded with HTTP code "
-                + str(resp.status)
-                + ")",
-                ephemeral=True,
-                )
-                self.bot.logger.error(
-                    "WEATHER | OpenWeatherMap returned response code "
-                    + str(resp.status)
-                )
+                await interaction.send("I couldn't get the weather. (Server responded with"
+                                       " HTTP code " + str(resp.status) + ")",
+                                       ephemeral=True,)
+                self.bot.logger.error("WEATHER | OpenWeatherMap returned response code " + str(resp.status))
                 return
             weather_data_metric = json.loads(await resp.read())
 
         # metric dataset returns the wind in meters/sec - we want km/h so lets convert
-        weather_data_metric["current"]["wind_speed"] = self.wind_ms_to_kmh(
-            weather_data_metric["current"]["wind_speed"]
-        )
+        weather_data_metric["current"]["wind_speed"] = self.ms_to_kmh(weather_data_metric["current"]["wind_speed"])
         if "wind_gust" in weather_data_metric["current"]:
-            weather_data_metric["current"]["wind_gust"] = self.wind_ms_to_kmh(
-                weather_data_metric["current"]["wind_gust"]
-            )
+            weather_data_metric["current"]["wind_gust"] = self.ms_to_kmh(weather_data_metric["current"]["wind_gust"])
         generated_embed = await self.generate_embed(weather_data_metric, weather_data_imperial)
         if location and setdefault:
-            self.bot.db_utils.set_member_pref(interaction.guild_id, interaction.user.id, "default_weather_location", location)
-            await interaction.send(
-                "Updated your default weather location to `" + str(location) + "`.",
-                embed=generated_embed,
-            )
+            self.bot.db_utils.set_member_pref(interaction.guild_id,
+                                              interaction.user.id,
+                                              "default_weather_location",
+                                              location)
+            await interaction.send("Updated your default weather location to `" + str(location) + "`.",
+                                   embed=generated_embed,)
         else:
             await interaction.send(embed=generated_embed)
 
 
 def setup(bot):
     if "OWM_TOKEN" not in os.environ:
-        bot.logger.error(
-            "WEATHER | OWM_TOKEN missing in your .env file! Weather module not loaded."
-        )
-        bot.logger.error(
-            "WEATHER | You need an OpenWeatherMap API key to use their API. https://openweathermap.org/api"
-        )
+        bot.logger.error("WEATHER | OWM_TOKEN missing in your .env file! Weather module not loaded.")
+        bot.logger.error("WEATHER | You need an OWM API key to use their API. https://openweathermap.org/api")
     else:
         bot.add_cog(WeatherCog(bot))
