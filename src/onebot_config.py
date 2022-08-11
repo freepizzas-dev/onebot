@@ -3,6 +3,10 @@ import logging
 # This is the config file for onebot.
 # Changes won't be reflected until you restart the bot.
 
+# Whether or not the bot should use sharding.
+# https://discord.com/developers/docs/topics/gateway#sharding
+AUTOSHARDING = False
+
 # Define your bot's 'Activity' here. It will show up as the 'status' in the user list.
 ACTIVITY = "onebot twobot redbot bluebot"
 
