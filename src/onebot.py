@@ -12,7 +12,12 @@ import onebot_utils
 import onebot_db_utils
 
 load_dotenv()
-onebot = commands.Bot("")
+
+# we don't need typing or user presence events, and disabling the intent
+# cuts down on events received from the gateway.
+intents = nextcord.Intents.default()
+intents.typing = False
+onebot = commands.Bot("", intents=intents)
 onebot.config = onebot_config
 onebot.utils = onebot_utils
 onebot.db_utils = onebot_db_utils
