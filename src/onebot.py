@@ -65,7 +65,8 @@ async def on_ready():
 # do we need to do any cleanup on close?
 @onebot.event
 async def on_close():
-    pass
+    if onebot.aiohttp_session:
+        await onebot.aiohttp_session.close()
 
 # start the bot
 discord_token = os.environ.get("DISCORD_TOKEN")
