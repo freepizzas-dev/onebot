@@ -24,6 +24,8 @@ else:
 onebot.config = onebot_config
 onebot.utils = onebot_utils
 onebot.db_utils = onebot_db_utils
+onebot.loaded_modules = []
+onebot.error_modules = []
 onebot.aiohttp_session = None  # async init happens later, in on_ready
 onebot.launch_time = datetime.now()
 onebot.log_filename = "log/onebot-" + str(onebot.launch_time.strftime("%Y%b%d-%H%M%S")) + ".log"
@@ -44,15 +46,15 @@ for module in onebot.config.ONEBOT_MODULES:
     module = "modules." + module + "." + module
     try:
         onebot.load_extension(module)
+        onebot.loaded_modules.append(module)
     except commands.ExtensionNotFound as e:
         onebot.logger.error("Module " + module + " couldn't be found.")
-        onebot.logger.error(e.__traceback__)
+        onebot.error_modules.append(module)
     except commands.ExtensionAlreadyLoaded as e:
         onebot.logger.error("Duplicate module " + module + " not loaded.")
-        onebot.logger.error(e.__traceback__)
     except (commands.NoEntryPointError, commands.ExtensionFailed) as e:
-        onebot.logger.error("Something went wrong while loading module " + module + ".")
-        onebot.logger.error(e.__traceback__)
+        onebot.logger.error("Something went wrong while loading module " + module + ".", exc_info=True)
+        onebot.error_modules.append(module)
 
 
 # what to do when connection to Discord is established
