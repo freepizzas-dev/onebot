@@ -43,9 +43,9 @@ if "DISCORD_TOKEN" not in os.environ:
 
 # simple module loader
 for module in onebot.config.ONEBOT_MODULES:
-    module = "modules." + module + "." + module
+    extension = "modules." + module + "." + module
     try:
-        onebot.load_extension(module)
+        onebot.load_extension(extension)
         onebot.loaded_modules.append(module)
     except commands.ExtensionNotFound as e:
         onebot.logger.error("Module " + module + " couldn't be found.")
