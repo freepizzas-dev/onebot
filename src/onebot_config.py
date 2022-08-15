@@ -19,6 +19,7 @@ ONEBOT_MODULES = [
     "gif",
     "google",
     "image",
+    "info",
     "joke",
     "moon",
     "quote",
@@ -70,3 +71,10 @@ DB_EXPIRY_DAYS = 90
 # If you find it to be too chatty, use logging.WARNING.
 # For testing, you might find logging.DEBUG useful.
 LOG_LEVEL = logging.INFO
+
+# You can specify various links that appear in the "/info" command below
+# Set to an empty string or remove entirely to hide the link from the command
+GITHUB_LINK = "https://github.com/freepizzas-dev/onebot"
+SUPPORT_SERVER = "https://discord.gg/cwWDVtCW3x"
+TOPGG_LINK = "https://top.gg/bot/825499706724843573"
+BOTSGG_LINK = "https://discord.bots.gg/bots/825499706724843573"
