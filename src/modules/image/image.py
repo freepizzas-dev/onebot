@@ -24,19 +24,22 @@ class ImageCog(commands.Cog):
         # get 20 results, filter through blacklist, then pick a random one
         # this library is kinda buggy. sometimes it throws unpredictable exceptions.
         # i kind of want to write my own scraper for this.
-        try:
-            arguments = {
-                "keywords": filter_keyword,
-                "limit": 100,
-                "safe_search": True,
-                "no_download": True,
-                "silent_mode": True,
-            }
-            response = googleimagesdownload()
-            url_list = response.download(arguments)
-        except:
-            url_list = []
-            pass
+        attempts = 0
+        url_list = []
+        while (not url_list) and (attempts < 5):
+            try:
+                arguments = {
+                    "keywords": filter_keyword,
+                    "limit": 100,
+                    "safe_search": True,
+                    "no_download": True,
+                    "silent_mode": True,
+                }
+                response = googleimagesdownload()
+                url_list = response.download(arguments)
+            except Exception:
+                attempts += 1
+                pass
 
         # filter out blacklist phrases from URLs
         filtered_list = []
@@ -68,11 +71,10 @@ class ImagePager(nextcord.ui.View):
 
     @nextcord.ui.button(label="Prev Image", style=nextcord.ButtonStyle.blurple)
     async def prev(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
-        if interaction.user != self.command_user:
-            return
-        if self.displayed_page > 0:
-            self.displayed_page -= 1
-        await self.update()
+        if interaction.user == self.command_user:
+            if self.displayed_page > 0:
+                self.displayed_page -= 1
+            await self.update()
 
     @nextcord.ui.button(label="1 of #", style=nextcord.ButtonStyle.secondary)
     async def current_page(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
@@ -80,18 +82,24 @@ class ImagePager(nextcord.ui.View):
 
     @nextcord.ui.button(label="Next Image", style=nextcord.ButtonStyle.blurple)
     async def next(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
-        if interaction.user != self.command_user:
-            return
-        if self.displayed_page < (len(self.image_list) - 1):
-            self.displayed_page += 1
-        await self.update()
+        if interaction.user == self.command_user:
+            if self.displayed_page < (len(self.image_list) - 1):
+                self.displayed_page += 1
+            await self.update()
+
+    @nextcord.ui.button(label="❌", style=nextcord.ButtonStyle.danger)
+    async def hide_buttons(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user == self.command_user:
+            self.clear_items()
+            await self.update()
 
     async def update(self):
         if not self.interaction:
             return
         # update middle button with current page number
-        self.children[1].label = str(self.displayed_page + 1) + " of " + str(len(self.image_list))
-        self.children[1].disabled = True
+        if self.children:
+            self.children[1].label = str(self.displayed_page + 1) + " of " + str(len(self.image_list))
+            self.children[1].disabled = True
         # if we don't have more than one page of results, remove buttons
         if len(self.image_list) == 1:
             self.clear_items()
