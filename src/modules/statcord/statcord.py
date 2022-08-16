@@ -1,6 +1,7 @@
 import os
-from discord.ext import commands
+from nextcord.ext import commands
 import statcord
+import types
 
 
 class StatcordCog(commands.Cog):
@@ -11,7 +12,11 @@ class StatcordCog(commands.Cog):
         self.api.start_loop()
 
     @commands.Cog.listener()
-    async def on_command(self, ctx):
+    async def on_interaction(self, interaction):
+        ctx = types.SimpleNamespace()
+        ctx.author = interaction.user
+        ctx.command = types.SimpleNamespace()
+        ctx.command.name = str(interaction.data["name"])
         self.api.command_run(ctx)
 
 
