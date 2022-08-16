@@ -53,6 +53,9 @@ ONEBOT_IMGBL = [
     "sevenstore.com",
     "alamy.com",
     "fabulistmagazine.com",
+    "chewy.com",
+    "support.discord.com",
+    "naijafinix.com",
 ]
 
 # Local sqlite3 database path -- default is usually ok
