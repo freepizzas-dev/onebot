@@ -13,11 +13,12 @@ class StatcordCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction):
-        ctx = types.SimpleNamespace()
-        ctx.author = interaction.user
-        ctx.command = types.SimpleNamespace()
-        ctx.command.name = str(interaction.data["name"])
-        self.api.command_run(ctx)
+        if interaction.type == nextcord.InteractionType.application_command:
+            ctx = types.SimpleNamespace()
+            ctx.author = interaction.user
+            ctx.command = types.SimpleNamespace()
+            ctx.command.name = str(interaction.data["name"])
+            self.api.command_run(ctx)
 
 
 def setup(bot):
