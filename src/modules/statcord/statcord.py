@@ -1,4 +1,5 @@
 import os
+import nextcord
 from nextcord.ext import commands
 import statcord
 import types
