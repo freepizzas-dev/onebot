@@ -40,6 +40,8 @@ You are now ready to start your bot. Use your python interpreter to start the bo
 
 ### COMMAND REFERENCE
 
+`/info` - show a simple information display for the bot, which includes useful links.
+
 #### SEARCH
 
 `/google` - an "I'm Feeling Lucky" search for the specified keywords. Works great for YouTube too! Try `/google yt keyboard cat`.
@@ -197,4 +199,4 @@ def setup(bot):
     bot.add_cog(ReadWriteCog(bot))
 ```
 
-If you need functionality that extends beyond one-row storage and retrieval, you can use `bot.utils.db_utils.get_db_connection(server_id)` to get your own sqlite3 Connection object, and do anything you want!
+If you need functionality that extends beyond one-row storage and retrieval, you can use `bot.db_utils.get_db_connection(server_id)` to get your own sqlite3 Connection object, and do anything you want!
