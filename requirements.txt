@@ -2,34 +2,34 @@
 #https://python.org
 #
 #python-dotenv for .env API key storage
-python-dotenv
 #https://pypi.org/project/python-dotenv/
+python-dotenv==0.20.0
 #
 #we obviously need the discord library
-nextcord
 #https://nextcord.readthedocs.io/en/latest/
+nextcord==2.1.0
 #
 #astral is used to calculate the moon phase
-astral
 #https://astral.readthedocs.io/en/latest/index.html
+astral==2.2
 #
 #geopy is used as a method to transform location names to LatLon, and vice versa (Nominatim service)
-geopy
 #https://geopy.readthedocs.io/en/stable/
+geopy==2.2.0
 #
 #google is required for the google module...
-google
 #https://pypi.org/project/google
+google==3.0.0
 #
 #wiktionaryparser for pulling data for /define command
-wiktionaryparser
 #https://pypi.org/project/wiktionaryparser/
+wiktionaryparser==0.0.97
 #
 #beautifulsoup for parsing some HTML data
-beautifulsoup4
 #https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+beautifulsoup4==4.11.1
 #
 #pillow for image resize
-pillow
 #https://pillow.readthedocs.io/en/stable/installation.html
+pillow==9.1.1
 #
