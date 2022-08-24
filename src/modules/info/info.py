@@ -22,7 +22,8 @@ class InfoCog(commands.Cog):
         embed_title = str(self_name) + " /info"
         embed_description = "I can see ~" + str(member_count) + " members in " + str(guild_count) + " server(s).\n"
         embed_description = embed_description + str(command_count) + " slash commands available globally.\n"
-        embed_description = embed_description + "Uptime: " + str(uptime)
+        embed_description = embed_description + "Uptime: " + str(uptime) + "\n"
+        embed_description = embed_description + "For a list of available commands, type `/`."
         embed = nextcord.Embed(title=embed_title, description=embed_description)
         loaded_modules = ", ".join(self.bot.loaded_modules)
         error_modules = ", ".join(self.bot.error_modules)
