@@ -10,6 +10,16 @@ class GifCog(commands.Cog):
         self.bot = bot
         self.TENOR_TOKEN = os.environ.get("TENOR_TOKEN")
 
+    async def get_gif_links(self, keyword):
+        params = {"key": self.TENOR_TOKEN, "q": keyword, "limit": 50}
+        endpoint = "https://g.tenor.com/v1/search"
+        async with self.bot.aiohttp_session.get(endpoint, params=params) as resp:
+            if resp.status != 200:
+                self.bot.logger.error("GIF | Received response code " + str(resp.status) + " from Tenor")
+                return "error"
+            results = json.loads(await resp.read())
+            return results
+
     @nextcord.slash_command(
         name="gif",
         description="Post a random GIF. Optionally, use a keyword to filter the results.",
@@ -21,60 +31,85 @@ class GifCog(commands.Cog):
             name="filter_keyword", description="Filter the GIFs using this keyword", required=False
         ),
     ):
-        random_gif = False
-        if not filter_keyword:
-            filter_keyword = await self.bot.utils.get_random_word(self.bot)
-            random_gif = True
-        attempts = 0
         results = []
-        while attempts < 25:
-            params = {"key": self.TENOR_TOKEN, "q": filter_keyword, "limit": 50}
-            endpoint = "https://g.tenor.com/v1/random"
-            async with self.bot.aiohttp_session.get(endpoint, params=params) as resp:
-                if resp.status == 429:
-                    await interaction.send(
-                        "Tenor says: rate limit exceeded! (Server sent response code 429)",
-                        ephemeral=True,
-                    )
-                    self.bot.logger.error("GIF | Received response code 429 from Tenor")
+        if not filter_keyword:  # select a random gif if no keyword specified
+            attempts = 0
+            while attempts < 25:
+                random_word = await self.bot.utils.get_random_word(self.bot)
+                if random_word == '':
+                    await interaction.send("Sorry, I couldn't choose a random GIF.", ephemeral=True)
                     return
-                elif resp.status != 200:
-                    await interaction.send(
-                        "Sorry, something went wrong on Tenor's end. (Server sent response code "
-                        + str(resp.status)
-                        + ")",
-                        ephemeral=True,
-                    )
-                    self.bot.logger.error(
-                        "GIF | Received response code " + str(resp.status) + " from Tenor"
-                    )
-                    return
-                results = json.loads(await resp.read())
-
-            # if we got a valid answer, send it.
-            if results["results"]:
-                # if there's only one result, set index to 0 or random.randint throws an exception
-                if len(results["results"]) == 1:
-                    gif_index = 0
-                else:
-                    gif_index = random.randint(0, len(results["results"]) - 1)
-                await interaction.send(results["results"][gif_index]["url"])
-                return
-
-            # if we didn't get a valid answer...
-            # if the user specified a keyword, we shouldn't try again in the case of 0 results.
-            if not random_gif:
-                await interaction.send(
-                    "No GIF results for `" + filter_keyword + "`.", ephemeral=True
-                )
-                return
-            # otherwise, increment attempts by 1 and generate a fresh random keyword.
-            else:
+                results = await self.get_gif_links(random_word)
+                if results != "error":
+                    if results["results"]:
+                        break
                 attempts += 1
-                filter_keyword = await self.bot.utils.get_random_word(self.bot)
-            if attempts == 25:
-                await interaction.send("Sorry, something went wrong on Tenor's end.", ephemeral=True)
-                self.bot.logger.error("GIF | Attempted and failed to retrieve a gif 25 times.")
+                if attempts == 25:
+                    await interaction.send("Failed to get a gif too many times. Try again later.", ephemeral=True)
+                    self.bot.logger.error("GIF | Attempted and failed to retrieve a gif 25 times.")
+        else:  # otherwise, look up the keyword once and return results
+            results = await self.get_gif_links(filter_keyword)
+        if not results["results"]:
+            await interaction.send("Sorry, no results for that GIF search.", ephemeral=True)
+
+        view = GifPager(interaction, results["results"])
+        await view.update()
+
+
+class GifPager(nextcord.ui.View):
+    interaction = None
+    view_message = None
+    gif_list = None
+    displayed_page = 0
+    btn_current_page = None
+    command_user = None
+
+    def __init__(self, interaction, gif_list):
+        super().__init__(timeout=None)
+        self.interaction = interaction
+        self.command_user = interaction.user
+        self.gif_list = gif_list
+
+    @nextcord.ui.button(label="Prev GIF", style=nextcord.ButtonStyle.blurple)
+    async def prev(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user == self.command_user:
+            if self.displayed_page > 0:
+                self.displayed_page -= 1
+            await self.update()
+
+    @nextcord.ui.button(label="1 of #", style=nextcord.ButtonStyle.secondary)
+    async def current_page(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        pass
+
+    @nextcord.ui.button(label="Next GIF", style=nextcord.ButtonStyle.blurple)
+    async def next(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user == self.command_user:
+            if self.displayed_page < (len(self.gif_list) - 1):
+                self.displayed_page += 1
+            await self.update()
+
+    @nextcord.ui.button(label="❌", style=nextcord.ButtonStyle.danger)
+    async def hide_buttons(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
+        if interaction.user == self.command_user:
+            self.clear_items()
+            await self.update()
+
+    async def update(self):
+        if not self.interaction:
+            return
+        # update middle button with current page number
+        if self.children:
+            self.children[1].label = str(self.displayed_page + 1) + " of " + str(len(self.gif_list))
+            self.children[1].disabled = True
+        # if we don't have more than one page of results, remove buttons
+        if len(self.gif_list) == 1:
+            self.clear_items()
+        gif_url = self.gif_list[self.displayed_page]["url"]
+        if not self.view_message:
+            await self.interaction.send(view=self, content=gif_url)
+            self.view_message = await self.interaction.original_message()
+        else:
+            await self.view_message.edit(view=self, content=gif_url)
 
 
 def setup(bot):
