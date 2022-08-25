@@ -16,6 +16,7 @@ async def get_random_word(bot):
         if resp.status != 200:
             bot.logger.error("RANDOMWORD | Failed.")
             bot.logger.error("RANDOMWORD | Response code: " + str(resp.status))
+            return ''
         else:
             word_data = json.loads(await resp.text())
     bot.logger.info("RANDOMWORD | " + word_data['word'])
