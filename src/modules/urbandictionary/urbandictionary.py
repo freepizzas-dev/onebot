@@ -23,6 +23,9 @@ class UrbandictionaryCog(commands.Cog):
             required=False,
         ),
     ):
+        if not interaction.channel.is_nsfw():
+            await interaction.send("This command is only available in NSFW channels.", ephemeral=True)
+            return
         wotd = False
         if not keyword:
             async with self.bot.aiohttp_session.get("https://urbandictionary.com") as resp:
