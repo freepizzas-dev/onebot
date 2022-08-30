@@ -9,6 +9,8 @@ python-dotenv==0.20.0
 #https://nextcord.readthedocs.io/en/latest/
 nextcord==2.1.0
 #
+#statcord is needed if you want to post stats to the statcord website
+statcord==3.1.0
 #astral is used to calculate the moon phase
 #https://astral.readthedocs.io/en/latest/index.html
 astral==2.2
