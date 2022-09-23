@@ -61,9 +61,17 @@ class googleimagesdownload:
         return bytes(object_raw, "utf-8").decode("unicode_escape")
 
     def _image_objects_from_pack(self, data):
-        image_objects = json.loads(data)[31][-1][12][2]
-        image_objects = [x for x in image_objects if x[0] == 1]
-        return image_objects
+        image_objects = json.loads(data)[56][-1][0][0][1][0]
+        url_list = []
+        for image in image_objects:
+            try:
+                dictionary = image[0][0]
+                dictionary = next(iter(dictionary.values()))
+                url = dictionary[1][3][0]
+                url_list.append(url)
+            except:
+                continue
+        return url_list
 
     # Downloading entire Web Document (Raw Page Content)
     def download_page(self, url):
@@ -77,14 +85,11 @@ class googleimagesdownload:
         except:
             print("Could not open URL. Please check your internet connection and/or ssl settings \n"
                     "If you are using proxy, make sure your proxy settings is configured correctly")
-            sys.exit()
         try:
             return self._image_objects_from_pack(self._extract_data_pack(respData)), self.get_all_tabs(respData)
         except Exception as e:
             print(e)
             print('Image objects data unpacking failed. Please leave a comment with the above error at https://github.com/hardikvasa/google-images-download/pull/298')
-            #don't kill my parent application >:(
-            #sys.exit()
 
     # Finding 'Next Image' from the given raw page
     def get_next_tab(self, s):
@@ -130,28 +135,6 @@ class googleimagesdownload:
                     time.sleep(0.1)  # Timer could be used to slow down the request for image downloads
                     page = page[end_content:]
         return tabs
-
-    # Format the object in readable format
-    def format_object(self, object):
-        data = object[1]
-        main = data[3]
-        info = data[9]
-        if info is None:
-            info = data[11]
-        formatted_object = {}
-        try:
-            formatted_object['image_height'] = main[2]
-            formatted_object['image_width'] = main[1]
-            formatted_object['image_link'] = main[0]
-            formatted_object['image_format'] = main[0][-1 * (len(main[0]) - main[0].rfind(".") - 1):]
-            formatted_object['image_description'] = info['2003'][3]
-            formatted_object['image_host'] = info['2003'][17]
-            formatted_object['image_source'] = info['2003'][2]
-            formatted_object['image_thumbnail_url'] = data[2][0]
-        except Exception as e:
-            print(e)
-            return None
-        return formatted_object
 
     # Building URL parameters
     def build_url_parameters(self, arguments):
@@ -280,8 +263,4 @@ class googleimagesdownload:
             else:
                 images, tabs = self.download_extended_page(url, arguments['chromedriver'])
 
-            url_list = []
-            for image in images:
-                image = self.format_object(image)
-                url_list.append(image['image_link'])
-            return url_list
+            return images
