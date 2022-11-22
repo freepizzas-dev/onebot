@@ -33,5 +33,5 @@ beautifulsoup4==4.11.1
 #
 #pillow for image resize
 #https://pillow.readthedocs.io/en/stable/installation.html
-pillow==9.1.1
+pillow==9.3.0
 #
