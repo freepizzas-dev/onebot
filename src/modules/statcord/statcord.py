@@ -10,10 +10,7 @@ class StatcordCog(commands.Cog):
         self.bot = bot
         self.key = os.environ.get("STATCORDKEY")
         self.api = statcord.Client(self.bot, self.key)
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        self.api.start_loop()  # don't start the loop until on_ready or the initial user count fails
+        self.api.start_loop()
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction):

@@ -1,23 +1,23 @@
+#below are the latest versions the bot has actually been tested with on my end
+#it probably works with more up to date ones just fine
 #python3.10
 #https://python.org
 #
 #python-dotenv for .env API key storage
 #https://pypi.org/project/python-dotenv/
-python-dotenv==0.20.0
+python-dotenv==1.0.0
 #
 #we obviously need the discord library
 #https://nextcord.readthedocs.io/en/latest/
-nextcord==2.3.2
+nextcord==2.4.2
 #
-#statcord is needed if you want to post stats to the statcord website
-statcord==3.1.0
 #astral is used to calculate the moon phase
 #https://astral.readthedocs.io/en/latest/index.html
-astral==2.2
+astral==3.2
 #
 #geopy is used as a method to transform location names to LatLon, and vice versa (Nominatim service)
 #https://geopy.readthedocs.io/en/stable/
-geopy==2.2.0
+geopy==2.3.0
 #
 #google is required for the google module...
 #https://pypi.org/project/google
@@ -29,9 +29,9 @@ wiktionaryparser==0.0.97
 #
 #beautifulsoup for parsing some HTML data
 #https://www.crummy.com/software/BeautifulSoup/bs4/doc/
-beautifulsoup4==4.11.1
+beautifulsoup4==4.12.2
 #
 #pillow for image resize
 #https://pillow.readthedocs.io/en/stable/installation.html
-pillow==9.3.0
+pillow==9.5.0
 #

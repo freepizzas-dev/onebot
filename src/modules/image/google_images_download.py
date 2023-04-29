@@ -80,7 +80,7 @@ class googleimagesdownload:
             'User-Agent'] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
         try:
             req = urllib.request.Request(url, headers=headers)
-            resp = urllib.request.urlopen(req)
+            resp = urllib.request.urlopen(req, timeout=10)
             respData = str(resp.read())
         except:
             print("Could not open URL. Please check your internet connection and/or ssl settings \n"
