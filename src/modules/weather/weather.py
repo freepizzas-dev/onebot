@@ -15,14 +15,21 @@ class WeatherCog(commands.Cog):
         self.owm_token = os.environ.get("OWM_TOKEN")
         self.owm_headers = {"Accept": "text/plain"}
         self.owm_url = "https://api.openweathermap.org/data/2.5/onecall"
+        self.nominatim_cache = {}
+        self.nominatim_reverse_cache = {}
 
     # reverse lookup the location coordinates of the weather station to a town or city name
     # zoom = 14 is 'suburb' level zoom, seems most appropriate
     # the address returned is too long; take the part BEFORE the third comma (ex: Ridgewood, Queens, Queens County)
     async def coordinates_to_placename(self, latitude, longitude):
-        placename = self.geolocator.reverse(
-            str(latitude) + ", " + str(longitude), zoom=14, addressdetails=False
-        ).address
+        search_string = str(latitude) + ", " + str(longitude)
+        if search_string in self.nominatim_reverse_cache:
+            placename = self.nominatim_reverse_cache[search_string]
+        else:
+            placename = self.geolocator.reverse(
+                search_string, zoom=14, addressdetails=False
+            ).address
+            self.nominatim_reverse_cache[search_string] = placename
         splitName = placename.split(",")
         if len(splitName) > 2:
             return splitName[0] + "," + splitName[1] + "," + splitName[2]
@@ -217,7 +224,11 @@ class WeatherCog(commands.Cog):
             weather_location = user_default_location
         else:
             weather_location = location
-        weather_location_coords = self.geolocator.geocode(weather_location, language="en")
+        if location in self.nominatim_cache:
+            weather_location_coords = self.nominatim_cache[location]
+        else:
+            weather_location_coords = self.geolocator.geocode(weather_location, language="en")
+            self.nominatim_cache[location] = weather_location_coords
         if not weather_location_coords:
             await interaction.send("Sorry, I couldn't find that location.", ephemeral=True)
             return
