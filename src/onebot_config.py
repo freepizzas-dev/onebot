@@ -23,7 +23,6 @@ ONEBOT_MODULES = [
     "joke",
     "moon",
     "quote",
-    "statcord",
     "topgg",
     "urbandictionary",
     "weather",
