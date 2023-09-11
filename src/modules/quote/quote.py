@@ -350,7 +350,7 @@ class QuoteCog(commands.Cog):
     ):
         self.prep_db(interaction.guild_id)
         if not (quote_text or quote_author or quote_image):
-            interaction.send("You can't add a completely blank quote!", ephemeral=True)
+            await interaction.send("You can't add a completely blank quote!", ephemeral=True)
             return
         quote_data = ""
         if quote_image:
