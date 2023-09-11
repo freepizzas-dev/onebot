@@ -65,6 +65,13 @@ class DefinePager(nextcord.ui.View):
         self.interaction = interaction
         self.etym_only = etym_only
         self.get_new_data()
+        # Wiktionary terms are case sensitive, and users sometimes specify the wrong case.
+        # We should check if the keyword we searched returned any data. if not, swap the case
+        # of the first letter and search again.
+        # (see Issue #7 on GitHub. thanks to laralove143)
+        if self.is_data_empty():
+            self.keyword = self.keyword[0].swapcase() + self.keyword[1:]
+            self.get_new_data()
 
     def get_new_data(self):
         definitions = {}
@@ -75,6 +82,15 @@ class DefinePager(nextcord.ui.View):
         definitions["language"] = self.language
         definitions["keyword"] = self.keyword
         self.define_data = definitions
+
+    def is_data_empty(self):
+        if not self.define_data:
+            return True
+        if len(self.define_data["data"]) == 0:
+            return True
+        if not (self.define_data["data"][0]["etymology"] or self.define_data["data"][0]["definitions"]):
+            return True
+        return False
 
     def browse_data(self, definitions, page_num=0):
         define_data = definitions["data"]
