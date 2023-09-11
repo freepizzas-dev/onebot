@@ -9,7 +9,7 @@ python-dotenv==1.0.0
 #
 #we obviously need the discord library
 #https://nextcord.readthedocs.io/en/latest/
-nextcord==2.4.2
+nextcord==2.5.0
 #
 #astral is used to calculate the moon phase
 #https://astral.readthedocs.io/en/latest/index.html
