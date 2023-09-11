@@ -1,6 +1,6 @@
 import nextcord
 from nextcord.ext import commands
-from googlesearch import search
+import googlesearch
 
 
 class GoogleCog(commands.Cog):
@@ -12,7 +12,7 @@ class GoogleCog(commands.Cog):
         description='Shows you the first Google result ("I\'m Feeling Lucky!") for a given search term.',
     )
     async def google(self, interaction: nextcord.Interaction, search_term):
-        results = search(search_term, tld="com", num=1, stop=1, safe="active")
+        results = googlesearch.search(search_term, num_results=1)
         try:
             link = results.__next__()
             await interaction.send(link)
