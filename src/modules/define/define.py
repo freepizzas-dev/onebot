@@ -229,13 +229,9 @@ class DefinePager(nextcord.ui.View):
     async def update(self):
         if not self.interaction:
             return
-        if len(self.define_data["data"]) == 0:
+        if self.is_data_empty():
             await self.interaction.send(content="Sorry boss, I got nothin'.", ephemeral=True)
             return
-        if not (self.define_data["data"][0]["etymology"] or self.define_data["data"][0]["definitions"]):
-            await self.interaction.send(content="Sorry boss, I got nothin'.", ephemeral=True)
-            return
-
         # if we don't have more than one page of results, remove buttons
         if len(self.define_data["data"]) < 2:
             self.clear_items()
