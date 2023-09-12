@@ -109,7 +109,7 @@ class FooCog(commands.Cog):
 
     @nextcord.slash_command(
         name="foo",
-        description='Sends the message 'foo foo foo!' as a response.',
+        description='Sends the message "foo foo foo!" as a response.',
     )
     async def foo(self, interaction: nextcord.Interaction):
         await interaction.send("foo foo foo!")
