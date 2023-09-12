@@ -1,3 +1,14 @@
+Another Discord bot written in Python using the nextcord library.
+
+Below is the public description for the developer-hosted live version of oneBot, followed by some implementation details and information on how to host your own copy or create new modules for the bot.
+
+
+
+-------
+
+
+
+
 ```
                    ____        _   
                   |  _ \      | |  
