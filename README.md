@@ -1,3 +1,14 @@
+Another Discord bot written in Python using the nextcord library.
+
+Below is the public description for the developer-hosted live version of oneBot, followed by some implementation details and information on how to host your own copy or create new modules for the bot.
+
+
+
+-------
+
+
+
+
 ```
                    ____        _   
                   |  _ \      | |  
@@ -98,7 +109,7 @@ class FooCog(commands.Cog):
 
     @nextcord.slash_command(
         name="foo",
-        description='Sends the message 'foo foo foo!' as a response.',
+        description='Sends the message "foo foo foo!" as a response.',
     )
     async def foo(self, interaction: nextcord.Interaction):
         await interaction.send("foo foo foo!")
