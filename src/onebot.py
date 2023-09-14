@@ -65,6 +65,20 @@ async def on_ready():
     activity = nextcord.Game(name=onebot.config.ACTIVITY)
     await onebot.change_presence(activity=activity)
 
+    # process guild list and leave any Banned Guilds
+    all_guilds = await onebot.fetch_guilds(limit=None).flatten()
+    for guild in all_guilds:
+        if guild.id in onebot.config.BANNED_GUILDS:
+            await guild.leave()
+            onebot.logger.warning("Leaving banned guild " + str(guild.id))
+
+# what to do when a Guild is joined
+@onebot.event
+async def on_guild_join(guild):
+    if guild.id in onebot.config.BANNED_GUILDS:
+        await guild.leave()
+        onebot.logger.warning("Leaving banned guild " + str(guild.id))
+
 
 # do we need to do any cleanup on close?
 @onebot.event

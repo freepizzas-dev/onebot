@@ -58,6 +58,20 @@ ONEBOT_IMGBL = [
     "naijafinix.com",
 ]
 
+# List IDs of banned guilds here. The default specifies some malicious guilds
+# and some "bot-list" type guilds that are associated with negative activity on Discord
+BANNED_GUILDS = [
+    960281078898249729,
+    799581681957732383,
+    899144844381917254,
+    898561725857685524,
+    913058885647073330,
+    903917888572882954,
+    971771931705630730,
+    1056538362418319460,
+    622568571557380096,
+]
+
 # Local sqlite3 database path -- default is usually ok
 # but you can make this anything you want.
 # Changing it won't make onebot copy your databases over, so make sure to do that
