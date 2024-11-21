@@ -1,3 +1,7 @@
+> [!NOTE]
+> The publicly available, live version of the bot is shutting down on 2025-01-01. I am no longer actively developing this bot. Feel free to use any code with attribution. <!-- You'll have to fix the bugs and bad code first. --> The original README is copied below.
+
+
 Another Discord bot written in Python using the nextcord library.
 
 Below is the public description for the developer-hosted live version of oneBot, followed by some implementation details and information on how to host your own copy or create new modules for the bot.
